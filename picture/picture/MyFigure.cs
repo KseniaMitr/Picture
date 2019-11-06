@@ -35,6 +35,11 @@ namespace picture
             return  move;
         }
 
+        public virtual void Move(int x, int y)
+        {
+
+        }
+
 
     }
 }

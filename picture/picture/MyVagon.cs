@@ -76,5 +76,24 @@ namespace picture
             return move;
         }
 
+        public override void Move(int x, int y)
+        {
+            // Перемещаем каждый объект из котоого состоит вагон.
+
+            base.Move(x, y);
+
+            // TODO: Расчитать новые координаты для первого колеса
+            int wheel1NewX = 0;
+            int wheel1NewY = 0;
+
+            // TODO: Расчитать новые координаты для второго колеса
+            int wheel2NewX = 0;
+            int wheel2NewY = 0;
+
+            wheel1.Move(wheel1NewX, wheel1NewY);
+            wheel2.Move(wheel2NewX, wheel2NewY);
+
+        }
+
     }
 }

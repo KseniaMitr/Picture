@@ -23,10 +23,12 @@ namespace picture
         }
 
         List<MyFigure> figure = new List<MyFigure>();
-        int k = 0;
+        // TODO: Реализовать с помощью enum
+        int currentAction = 0;
         int startX = 0;
         int startY = 0;
         int numF = -1;
+        MyFigure currentMoveFigure;
         bool move = false;
         
 
@@ -54,22 +56,22 @@ namespace picture
 
         private void RectBut_Click(object sender, EventArgs e)
         {
-            k = 1;
+            currentAction = 1;
         }
 
         private void CirclBut_Click(object sender, EventArgs e)
         {
-            k = 2;
+            currentAction = 2;
         }
         private void butMoving_Click(object sender, EventArgs e)
         {
-            k = 3;
+            currentAction = 3;
             numF = -1;
         }
 
         private void butVagon_Click(object sender, EventArgs e)
         {
-            k = 4;
+            currentAction = 4;
         }
 
         private void drawing_machine_Paint(object sender, PaintEventArgs e)
@@ -97,7 +99,7 @@ namespace picture
             startX = e.Location.X;
             startY = e.Location.Y;
 
-            if (k == 3)
+            if (currentAction == 3)
             {
                 for (int i = 0; i < figure.Count; i++)
                 {
@@ -108,13 +110,20 @@ namespace picture
                         break;
                     }
                 }
+
+                // Лучше искать фигуру так
+                foreach (MyFigure fig in figure)
+                {
+                    if (fig.isPointInside(e.X, e.Y))
+                        currentMoveFigure = fig;
+                }
             }
         }          
        
 
         private void drawing_machine_MouseUp(object sender, MouseEventArgs e)
         {
-            switch (k)
+            switch (currentAction)
             {
                 case 1:
                     if (startX < e.Location.X && startY < e.Location.Y)

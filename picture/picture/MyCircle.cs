@@ -44,7 +44,12 @@ namespace picture
 
             return move;
         }
-       
+
+        public override void Move(int x, int y)
+        {
+            // TODO: переопределить
+        }
+
 
     }
 }
