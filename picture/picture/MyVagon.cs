@@ -24,8 +24,8 @@ namespace picture
             int radCirc = Width / 10;
 
             int xCirc1 = X + radCirc;
-            int xCirc2 = X + radCirc+ 3 * Width / 5;
-            int yCirc = Y + Height;           
+            int xCirc2 = X + radCirc + 3 * Width / 5;
+            int yCirc = Y + Height;
 
             wheel1.X = xCirc1;
             wheel1.Y = yCirc;
@@ -40,39 +40,16 @@ namespace picture
         {
             base.Draw(g);
             wheel1.Draw(g);
-            wheel2.Draw(g);
+            wheel2.Draw(g);            
         }
 
         public override bool isPointInside(int x, int y)
         {         
             bool move = false;
-            if (x >= this.X && x <= (this.X + this.Width) && y >= this.Y && y <= (this.Y + this.Height))
+            if (x >= X && x <= (X + Width) && y >= Y && y <= (Y + Height))
             {
                 move = true;                              /////проверка нажатия на прямоуг.
-            } 
-            
-            //else
-            //{
-            //    int xZentr1 = X + wheel1.Radius;         /////проверка нажатия на 1 колесо
-            //    int yZentr1 = Y + wheel1.Radius;
-
-            //    int xNowrad1 = Math.Abs(xZentr1 - x);
-            //    int yNowrad1 = Math.Abs(yZentr1 - y);
-            //    int Nowrad1 = (int)Math.Sqrt(Math.Pow(xNowrad1, 2) + Math.Pow(yNowrad1, 2));
-
-            //    if (Nowrad1 <= wheel1.Radius) move = true;
-
-
-            //    int xZentr2 = X + wheel1.Radius;           /////проверка нажатия на 2 колесо
-            //    int yZentr2 = Y + wheel1.Radius;
-
-            //    int xNowrad2 = Math.Abs(xZentr2 - x);
-            //    int yNowrad2 = Math.Abs(yZentr2 - y);
-            //    int Nowrad2 = (int)Math.Sqrt(Math.Pow(xNowrad2, 2) + Math.Pow(yNowrad2, 2));
-
-            //    if (Nowrad2 <= wheel2.Radius) move = true;
-            //}
-
+            }      
             return move;
         }
 
@@ -82,17 +59,16 @@ namespace picture
 
             base.Move(x, y);
 
-            // TODO: Расчитать новые координаты для первого колеса
-            int wheel1NewX = 0;
-            int wheel1NewY = 0;
+            //  Расчитать новые координаты для первого колеса
+            int wheel1NewX = x + wheel1.Radius;
+            int wheel1NewY = y + base.Height;
 
-            // TODO: Расчитать новые координаты для второго колеса
-            int wheel2NewX = 0;
-            int wheel2NewY = 0;
+            //  Расчитать новые координаты для второго колеса
+            int wheel2NewX = x + wheel2.Radius + 3 * base.Width / 5;
+            int wheel2NewY = y + base.Height;
 
             wheel1.Move(wheel1NewX, wheel1NewY);
             wheel2.Move(wheel2NewX, wheel2NewY);
-
         }
 
     }

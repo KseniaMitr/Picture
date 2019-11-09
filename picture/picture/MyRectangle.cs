@@ -41,7 +41,7 @@ namespace picture
         public override bool isPointInside(int x, int y)
         {
             bool move = false;
-            if (x >= this.X && x <= (this.X + this.Width) && y >= this.Y && y <= (this.Y + this.Height)) 
+            if (x >= X && x <= (X + Width) && y >= Y && y <= (Y + Height)) 
             {
                 move = true;
             }
@@ -50,7 +50,8 @@ namespace picture
 
         public override void Move(int x, int y)
         {
-            // TODO: переопределить
+            X = x;
+            Y = y;            
         }
     }
 }

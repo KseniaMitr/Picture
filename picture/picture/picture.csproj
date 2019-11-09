@@ -55,7 +55,10 @@
     <Compile Include="MyCircle.cs" />
     <Compile Include="MyFigure.cs" />
     <Compile Include="MyRectangle.cs" />
+    <Compile Include="MyTrain.cs" />
     <Compile Include="MyVagon.cs" />
+    <Compile Include="MyVagonCoal.cs" />
+    <Compile Include="MyVagonSand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

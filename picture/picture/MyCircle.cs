@@ -47,9 +47,9 @@ namespace picture
 
         public override void Move(int x, int y)
         {
-            // TODO: переопределить
+            X = x;
+            Y = y;
         }
-
 
     }
 }

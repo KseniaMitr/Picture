@@ -23,14 +23,15 @@ namespace picture
         }
 
         List<MyFigure> figure = new List<MyFigure>();
-        // TODO: Реализовать с помощью enum
-        int currentAction = 0;
-        int startX = 0;
-        int startY = 0;
-        int numF = -1;
-        MyFigure currentMoveFigure;
-        bool move = false;
         
+        int startX = 0;
+        int startY = 0;       
+        bool move = false;
+        int count = 1;
+        MyFigure currentMoveFigure;
+
+        enum buttonAction { rectangle, circle, vagon, vagonCoal, vagonSand, train, move};
+        buttonAction currentAction;
 
         public void DrawRectangle(int x, int y, int width, int height)
         {
@@ -53,44 +54,75 @@ namespace picture
             figure.Add(vagon);
         }
 
+        public void DrawVagonCoal (int x, int y, int wid, int heig)
+        {
+            Graphics g = CreateGraphics();
+            MyVagonCoal vagC = new MyVagonCoal(x, y, wid, heig);
+            figure.Add(vagC);
+        }
+
+        public void DrawVagonSand(int x, int y, int wid, int heig)
+        {
+            Graphics g = CreateGraphics();
+            MyVagonSand vagS = new MyVagonSand(x, y, wid, heig);
+            figure.Add(vagS);
+        }
+
+        public void DrawTrain(int x, int y, int wid, int heig)
+        {
+            Graphics g = CreateGraphics();
+            MyTrain train = new MyTrain(x, y, wid, heig,count);
+            figure.Add(train);
+        }
 
         private void RectBut_Click(object sender, EventArgs e)
         {
-            currentAction = 1;
+            currentAction = buttonAction.rectangle;
+            move = false;
         }
 
         private void CirclBut_Click(object sender, EventArgs e)
         {
-            currentAction = 2;
-        }
-        private void butMoving_Click(object sender, EventArgs e)
-        {
-            currentAction = 3;
-            numF = -1;
-        }
+            currentAction = buttonAction.circle;
+            move = false;
+        }        
 
         private void butVagon_Click(object sender, EventArgs e)
         {
-            currentAction = 4;
+            currentAction = buttonAction.vagon;
+            move = false;
+        }
+
+        private void vagonCoal_Click(object sender, EventArgs e)
+        {
+            currentAction = buttonAction.vagonCoal;
+            move = false;
+        }
+
+        private void vagonSand_Click(object sender, EventArgs e)
+        {
+            currentAction = buttonAction.vagonSand;
+            move = false;
+        }
+
+        private void butMoving_Click(object sender, EventArgs e)
+        {
+            currentAction = buttonAction.move;
+        }
+
+        private void butTrain_Click(object sender, EventArgs e)
+        {
+            currentAction = buttonAction.train;
+            count = Convert.ToInt32(countVag.Text);
         }
 
         private void drawing_machine_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = CreateGraphics();
 
-            foreach (MyFigure rect in figure)
+            foreach (MyFigure fig in figure)
             {
-                rect.Draw(g);
-            }
-
-            foreach (MyFigure circ in figure)
-            {
-                circ.Draw(g);
-            }
-
-            foreach (MyFigure vagon in figure)
-            {
-                vagon.Draw(g);
+                fig.Draw(g);
             }
         }   
         
@@ -99,33 +131,24 @@ namespace picture
             startX = e.Location.X;
             startY = e.Location.Y;
 
-            if (currentAction == 3)
+            if (currentAction == buttonAction.move)
             {
-                for (int i = 0; i < figure.Count; i++)
-                {
-                    move = figure[i].isPointInside(e.Location.X, e.Location.Y);
-                    if (move)
-                    {
-                        numF = i;                        
-                        break;
-                    }
-                }
-
-                // Лучше искать фигуру так
                 foreach (MyFigure fig in figure)
                 {
                     if (fig.isPointInside(e.X, e.Y))
+                    {
                         currentMoveFigure = fig;
+                        move = true;
+                    }
                 }
             }
-        }          
-       
+        }     
 
         private void drawing_machine_MouseUp(object sender, MouseEventArgs e)
-        {
+        {           
             switch (currentAction)
             {
-                case 1:
+                case buttonAction.rectangle:
                     if (startX < e.Location.X && startY < e.Location.Y)
                         DrawRectangle(startX, startY, e.Location.X - startX, e.Location.Y - startY);
 
@@ -139,14 +162,14 @@ namespace picture
                         DrawRectangle(startX, e.Location.Y, e.Location.X - startX, startY - e.Location.Y);
                     break;
 
-                case 2:
+                case buttonAction.circle:
                     int xrad = Math.Abs(startX - e.Location.X);
                     int yrad = Math.Abs(startY - e.Location.Y);
                     int rad = (int)Math.Sqrt(Math.Pow(xrad, 2) + Math.Pow(yrad, 2));
                     DrawCircle(startX - rad, startY - rad, rad);
                     break;
 
-                case 4:
+                case buttonAction.vagon:
                     if (startX < e.Location.X && startY < e.Location.Y)
                         DrawVagon(startX, startY, e.Location.X - startX, e.Location.Y - startY);
 
@@ -159,16 +182,63 @@ namespace picture
                     if (startX < e.Location.X && startY > e.Location.Y)
                         DrawVagon(startX, e.Location.Y, e.Location.X - startX, startY - e.Location.Y);
                     break;
+
+                case buttonAction.vagonCoal:
+                    if (startX < e.Location.X && startY < e.Location.Y)
+                        DrawVagonCoal(startX, startY, e.Location.X - startX, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY < e.Location.Y)
+                        DrawVagonCoal(e.Location.X, startY, startX - e.Location.X, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY > e.Location.Y)
+                        DrawVagonCoal(e.Location.X, e.Location.Y, startX - e.Location.X, startY - e.Location.Y);
+
+                    if (startX < e.Location.X && startY > e.Location.Y)
+                        DrawVagonCoal(startX, e.Location.Y, e.Location.X - startX, startY - e.Location.Y);
+                    break;
+
+                case buttonAction.vagonSand:
+                    if (startX < e.Location.X && startY < e.Location.Y)
+                        DrawVagonSand(startX, startY, e.Location.X - startX, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY < e.Location.Y)
+                        DrawVagonSand(e.Location.X, startY, startX - e.Location.X, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY > e.Location.Y)
+                        DrawVagonSand(e.Location.X, e.Location.Y, startX - e.Location.X, startY - e.Location.Y);
+
+                    if (startX < e.Location.X && startY > e.Location.Y)
+                        DrawVagonSand(startX, e.Location.Y, e.Location.X - startX, startY - e.Location.Y);
+                    break;
+
+                case buttonAction.train:
+                    if (startX < e.Location.X && startY < e.Location.Y)
+                        DrawTrain(startX, startY, e.Location.X - startX, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY < e.Location.Y)
+                        DrawTrain(e.Location.X, startY, startX - e.Location.X, e.Location.Y - startY);
+
+                    if (startX > e.Location.X && startY > e.Location.Y)
+                        DrawTrain(e.Location.X, e.Location.Y, startX - e.Location.X, startY - e.Location.Y);
+
+                    if (startX < e.Location.X && startY > e.Location.Y)
+                        DrawTrain(startX, e.Location.Y, e.Location.X - startX, startY - e.Location.Y);
+                    break;
             }
 
-            if (move)
-            {               
-                figure[numF].X = e.Location.X;
-                figure[numF].Y = e.Location.Y; 
-            }
-
+            if (move)    
+                currentMoveFigure.Move(e.Location.X, e.Location.Y);
+            
             Refresh();
         }
-       
+
+        private void countVag_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+            if (!Char.IsDigit(number))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
